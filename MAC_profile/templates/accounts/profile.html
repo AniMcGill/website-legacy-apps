@@ -1,0 +1,29 @@
+{% extends 'base_html.html' %}
+{% load static %}
+{% load cache %}
+{% block titleextra %} - User - {{ usr.username }}{% endblock %}
+{% block main %}
+<div class="col-md-4">
+	<dl><dt>Profile Avatar:</dt><dd><img src="{{usr.profile.avatar}}" alt="{{usr.username}}'s Avatar" class="img-rounded" ></dd></dl>
+</div>
+{% cache 500 profile %}
+<div class="col-md-8">
+	<dl class="dl-horizontal">
+		<dt>Username:</dt><dd>{{usr.username}}</dd>
+		<dt>Display Name:</dt><dd>{{usr.profile.display_name}}</dd>
+		<dt>Location:</dt><dd>{{usr.profile.location}}</dd>
+		<dt>Website:</dt><dd><a href="{{usr.profile.website_url}}">{{usr.profile.website_text}}</a></dd>
+		<dt>User Text:</dt><dd>{{usr.profile.blurb}}</dd>
+		<dt>Signature:</dt>
+		<dd>{{usr.profile.sig_shown|safe }}</dd>
+	</dl>
+</div>
+{% endcache %}
+{% endblock %}
+
+{% block extraScripts %}
+<script>
+var menuItem = document.getElementById("menu_profile");
+menuItem.className = "active";
+</script>
+{% endblock %}

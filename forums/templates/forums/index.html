@@ -1,0 +1,30 @@
+{% extends 'base_html.html' %}
+{% load static %}
+{% load forumTags %}
+{% block main %}
+	<table id="forum-index" class="table table-hover fixed">
+	<col style="width: 60px;">
+	{% for category in categories %}
+		<tr onclick="document.location = '{{category.get_absolute_url}}'" style="cursor: pointer"><td></td><td></td><th style="text-align:center">{{category.name}}</th><td></td></tr>
+		<tr><th>Read</th><td>Board</td><td>Newest Thread</td><td>Latest Post</td></tr>
+		{% for board in category.category_set.all %}
+		   {% if user.is_authenticated %}
+		   	{% if board in user.profile.group.allowed_read.all %}
+				<tr onclick="document.location = '{{board.get_absolute_url}}';" style="cursor: pointer"><td>{% readBoardIMG board "/static/img/read_icon.png" "/static/img/unread_icon.png" %}</td><td>{{board.name}}<br /><dfn>{{board.description}}</dfn></td><td>{{board.last_thread}}<br /><dfn>By: {{board.last_thread.creator}}</dfn></td><td>In: {{board.last_post.thread}}<br /><dfn>By: {{board.last_post.user}}</dfn></td></tr>
+				{% endif %}
+			{% else %}
+				{% if board.anon_viewable %}
+				<tr onclick="document.location = '{{board.get_absolute_url}}';" style="cursor: pointer"><td><img src="{% static 'img/read_icon.png'%}" alt="read" ></td><td>{{board.name}}<br /><dfn>{{board.description}}</dfn></td><td>{{board.last_thread}}<br /><dfn>By: {{board.last_thread.creator}}</dfn></td><td>In: {{board.last_post.thread}}<br /><dfn>By: {{board.last_post.user}}</dfn></td></tr>
+				{% endif %}
+			{% endif %}
+		{% endfor %}
+	{% endfor %}
+	</table>
+{% endblock %}
+
+{% block extraScripts %}
+<script>
+var menuItem = document.getElementById("menu_forum");
+menuItem.className = "active";
+</script>
+{% endblock %}

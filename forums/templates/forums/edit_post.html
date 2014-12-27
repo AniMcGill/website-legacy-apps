@@ -1,0 +1,16 @@
+{% extends 'base_html.html' %}
+{% load static %}
+{% block titleextra %} - {{ post.thread.subject }} - Edit Post{% endblock %}
+{% block main %}
+<div class="NewThread">
+<h1>New Thread in {{ board.name }}</h1>
+<form method="post" action="{{post.get_absolute_url}}edit/">
+{% csrf_token %}
+<p>Thread: {{post.thread.subject}}</p>
+<p>Text:<br/>{{form.text}}</p>
+{{form.thread_id}}
+{{form.post_id}}
+<p><input type="submit" value="Post" /></p>
+</form>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base_html.html' %}
+{% load static %}
+{% block main %}
+<ul class="nav nav-tabs" id="event-tabs">
+	<li><a href="#upcoming" data-toggle="tab">Upcoming Events</a></li>
+	<li><a href="#today" data-toggle="tab">Today's Events</a></li>
+	<li><a href="#past" data-toggle="tab">Past Events</a></li>
+</ul>
+<br>
+<div class="tab-content">
+	<div class="tab-pane fade" id="upcoming">
+	{% for event in upcoming %}
+		<div class="panel panel-info vevent">
+			<div class="panel-heading"><a href="{{event.get_absolute_url}}" class="panel-title summary url">{{event.name}}</a></div>
+			<div class="panel-body">
+				<ul class="list-inline">
+					<li>What: <span class="category">{{event.event_type}}</span></li><li>When: <span class="dtstart">{{event.at}}<span class="value-title" title="{{event.at.isoformat}}"></span></span></li><li>Where: <span>{{event.location.name}}</span></li>
+				</ul>
+				<span class="dtend"><span class="value-title" title="{{event.till.isoformat}}"></span></span>
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+	<div class="tab-pane fade" id="today">
+	{% for event in today %}
+		<div class="panel panel-primary vevent">
+			<div class="panel-heading"><a href="{{event.get_absolute_url}}" class="panel-title summary url">{{event.name}}</a></div>
+			<div class="panel-body">
+				<ul class="list-inline">
+					<li>What: <span class="category">{{event.event_type}}</span></li><li>When: <span class="dtstart">{{event.at}}<span class="value-title" title="{{event.at.isoformat}}"></span></span></li><li>Where: <span>{{event.location.name}}</span></li>
+				</ul>
+				<span class="dtend"><span class="value-title" title="{{event.till.isoformat}}"></span></span>
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+	<div class="tab-pane fade" id="past">
+	{% for event in past %}
+		<div class="panel panel-primary vevent">
+			<div class="panel-heading"><a href="{{event.get_absolute_url}}" class="panel-title summary url">{{event.name}}</a></div>
+			<div class="panel-body">
+				<ul class="list-inline">
+					<li>What: <span class="category">{{event.event_type}}</span></li><li>When: <span class="dtstart">{{event.at}}<span class="value-title" title="{{event.at.isoformat}}"></span></span></li><li>Where: <span>{{event.location.name}}</span></li>
+				</ul>
+				<span class="dtend"><span class="value-title" title="{{event.till.isoformat}}"></span></span>
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+</div>
+{% endblock %}
+{% block extraScripts %}
+<script>
+$(function(){
+	$('#event-tabs a:first').tab('show')
+})
+</script>
+{% endblock %}

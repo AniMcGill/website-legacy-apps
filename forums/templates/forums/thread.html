@@ -1,0 +1,75 @@
+{% extends 'base_html.html' %}
+{% load static %}
+{% block titleextra %} - {{ thread.subject }}{% endblock %}
+
+{% block extrahead %}
+{% if posts.has_previous %}
+<link rel="prev" href="{{thread.get_absolute_url}}{{ posts.previous_page_number }}/">
+{% endif %}
+{% if posts.has_next %}
+<link rel="next" href="{{thread.get_absolute_url}}{{ posts.next_page_number }}/">
+{% endif %}
+{% endblock %}
+
+{% block main %}
+{% if thread.has_poll %}
+	<p>This thread has polls, which are currently disabled...</p>
+{% endif %}
+{% for post in posts %}
+<div class="row" id="post_{{ post.id }}">	
+	<div class="col-md-3">
+		<div class="UserInfo">
+			<a href="{{post.user.profile.get_absolute_url}}" title="Load Profile of {{post.user.profile.display_name}}">{{post.user.profile.display_name}}</a><br />
+			<a href="{{post.user.profile.get_absolute_url}}" title="Load Profile of {{post.user.profile.display_name}}">
+			<img src="{{post.user.profile.avatar}}" class="img-rounded" alt="{{post.user.profile.display_name}}'s avatar"/></a>
+			<br />{{post.user.profile.blurb}}
+		</div>
+	</div>
+	<div class="col-md-9">
+		<div class="PostHeader">Created on: {{post.created}} | <a href="{{post.get_absolute_url}}">link</a>{% if user == post.user or user.is_superuser or perms.forums.can_moderate %} | <a href="{{post.get_absolute_url}}edit/">edit</a>{% endif %}</div>
+		<hr>
+		<div class="PostBody">{{ post.text_shown|safe }}<hr><div class="sig">{{ post.user.profile.sig_shown|safe }}</div></div>
+	</div>
+</div>
+<hr>
+{% endfor %} 
+{% if form %}
+<div class="accordion" id="quickreplycontainer">
+	<div class="accordion-group">
+		<div class="accordion-heading">
+			<a class="accordion-toggle" data-toggle="collapse" data-parent="#quickreplycontainer" href="#quickreply">
+				Quick Reply
+			</a>
+		</div>
+		<div id="quickreply" class="accordion-body collapse">
+			<div class="accordion-inner">
+			<form method="post" action="{{thread.get_absolute_url}}{{posts.number}}/">
+			<fieldset>
+			{% csrf_token %}
+			{{form.text}}<br />
+			{{form.thread_id}}
+			<button type="submit" class="btn">Post</button>
+			</fieldset>
+			</form>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</details>
+{% endif %}
+<ul class="pagination pagination-centered">
+	{% if posts.has_previous %}
+	<li><a href="{{thread.get_absolute_url}}{{ posts.previous_page_number }}/">&laquo;</a></li>
+	{% else %}
+	<li class="disabled"><span>&laquo;</span></li>
+	{% endif %}
+	<li class="active"><span>{{ posts.number }} of {{ posts.paginator.num_pages }}</span></li>
+	{% if posts.has_next %}
+	<li><a href="{{thread.get_absolute_url}}{{ posts.next_page_number }}/">&raquo;</a></li>
+	{% else %}
+	<li class="disabled"><span>&raquo;</span></li>
+	{% endif %}
+</ul>
+{% endblock %}

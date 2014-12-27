@@ -1,0 +1,47 @@
+{% extends 'base_html.html' %}
+{% load static %}
+{% block titleextra %} - Change Password{% endblock %}
+
+{% block main %}
+
+<div class="register">
+<form method="post" class="form-horizontal" action="/accounts/newpass/">
+<fieldset>
+<legend>Set New Password</legend>
+{% csrf_token %}
+<div class="control-group">
+	<label class="control-label" for="id_old_password">{{ form.old_password.label }}</label>
+	<div class="controls">
+		{{ form.old_password }}
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label" for="id_password">{{ form.password.label }}</label>
+	<div class="controls">
+		{{ form.password }}
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label" for="id_passwordConfirm">{{ form.passwordConfirm.label }}</label>
+	<div class="controls">
+		{{ form.passwordConfirm }}
+	</div>
+</div>
+
+<div class="control-group">
+	<div class="controls">
+		<input type="submit" class="btn" value="Change Password" />
+	</div>
+</div>
+</fieldset>
+</form>
+</div>
+
+{% endblock %}
+
+{% block extraScripts %}
+<script>
+var menuItem = document.getElementById("menu_new_pass");
+menuItem.className = "active";
+</script>
+{% endblock %}

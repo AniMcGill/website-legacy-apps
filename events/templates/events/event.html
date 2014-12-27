@@ -1,0 +1,19 @@
+{% extends 'base_html.html' %}
+{% load static %}
+{% block main %}
+<div class="vevent">
+	<h1 class="summary"">{{event.name}}</h1>
+	<dl>
+		<dt>Type:</dt>
+		<dd class="category">{{event.event_type.name}}</dd>
+		<dt>Start Time:</dt>
+		<dd class="dtstart"><time datetime="{{event.at.isoformat}}">{{event.at}}</time><span class="value-title" title="{{event.at.isoformat}}"></span></dd>
+		<dt>End Time:</dt>
+		<dd class="dtend"><time datetime="{{event.till.isoformat}}">{{event.till}}</time><span class="value-title" title="{{event.till.isoformat}}"></span></dd>
+		<dt>Location:</dt>
+		<dd class="location">{{event.location.ordered|safe}}</dd>
+		<dt><a href="{{event.thread.get_absolute_url}}">Description:</a></dt>
+		<dd class="description">{{event.get_description|safe}}</dd>
+	</dl>
+</div>
+{% endblock %}

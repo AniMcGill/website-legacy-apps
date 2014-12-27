@@ -1,0 +1,16 @@
+{% extends 'base_html.html' %}
+{% load static %}
+{% block main %}
+<h1>Upcoming Events</h1>
+{% for event in events %}
+<div class="panel panel-default vevent">
+	<div class="panel-heading"><a href="{{event.get_absolute_url}}" class="panel-title summary url">{{event.name}}</a></div>
+	<div class="panel-body">
+		<ul class="list-inline">
+			<li>What: <span class="category">{{event.event_type}}</span></li><li>When: <span class="dtstart">{{event.at}}<span class="value-title" title="{{event.at.isoformat}}"></span></span></li><li>Where: <span>{{event.location.name}}</span></li>
+		</ul>
+		<span class="dtend"><span class="value-title" title="{{event.till.isoformat}}"></span></span>
+	</div>
+</div>
+{% endfor %}
+{% endblock %}

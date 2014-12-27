@@ -1,0 +1,54 @@
+	{% extends 'base_html.html' %}
+{% load static %}
+{% load forumTags %}
+{% block titleextra %} - {{ board.name }}{% endblock %}
+{% block main %}
+	<div class="cat_list">
+	{% if user.is_authenticated %}
+		{% if board in user.profile.group.allowed_post.all %}
+			<p><a href="{{board.get_absolute_url}}post/">Start New Thread</a></p>
+		{% endif %}
+	{% endif %}
+	{% if sub_boards %}
+	<table class="table table-hover fixed">
+		<col style="width: 60px;">
+		<tr><th>Read</th><th>Sub-board</th><th>Post Count</th></tr>
+		{% for sub in sub_boards %}
+		<tr onclick="document.location = '{{sub.get_absolute_url}}';" style="cursor: pointer"><td>{% readBoardIMG sub "/static/img/read_icon.png" "/static/img/unread_icon.png" %}</td><td>{{sub.name}}<br /><dfn>{{sub.description}}</dfn></a></td><td>{{sub.post_count}}</td></tr>
+		{% endfor %}
+	</table>
+	{% endif %}
+	
+	{% if threads %}
+		<table class="table table-hover fixed">
+		<col style="width: 60px;">
+		<tr><th>Read</th><th>Topic</th><th>Post Count</th><th>Created at</th><th>Last Post</th></tr>
+		{% for thread in threads %}
+		<tr onclick="document.location = '{{thread.get_absolute_url}}';" style="cursor: pointer"><td>{% readTrackIMG thread "/static/img/read_icon.png" "/static/img/unread_icon.png" %}</td><td>{{thread.subject}}<br /><dfn>By: {{thread.creator.profile.display_name}}</dfn></td><td>{{thread.post_count}}</td><td>{{thread.created}}</td><td>{{thread.get_last.last}}<br /><dfn>By: {{thread.get_last.user}}</dfn></td></tr>
+		{% endfor %}
+		</table>
+	{% endif %}
+	</div>
+	<div class="pagination-centered">
+		<ul class="pagination">
+			{% if threads.has_previous %}
+			<li><a href="{{board.get_absolute_url}}{{ threads.previous_page_number }}/">&laquo;</a></li>
+			{% else %}
+			<li class="disabled"><span>&laquo;</span></li>
+			{% endif %}
+			<li class="active"><span>{{ threads.number }} of {{ threads.paginator.num_pages }}</span></li>
+			{% if threads.has_next %}
+			<li><a href="{{board.get_absolute_url}}{{ threads.next_page_number }}/">&raquo;</a></li>
+			{% else %}
+			<li class="disabled"><span>&raquo;</span></li>
+			{% endif %}
+		</ul>
+	</div>
+{% endblock %}
+
+{% block extraScripts %}
+<script>
+var menuItem = document.getElementById("{{board.menu_id}}");
+menuItem.className = "active";
+</script>
+{% endblock %}

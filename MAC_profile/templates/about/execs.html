@@ -1,0 +1,32 @@
+{% extends 'base_html.html' %}
+{% load static %}
+{% load cache %}
+{% block titleextra %} - About - Execs{% endblock %}
+{% block main %}
+<div>
+	<br />
+	{% for exec in execs %}
+	<div class="row">
+		<div class="col-md-4"><img src="{{ exec.user.profile.avatar }}" alt="{{ exec }}"></div>
+		<div class="col-md-8">
+			<h2><a href="{{ exec.get_absolute_url }}">{{ exec }}</a></h2>
+			<dl>
+				<dt>Name</dt>
+				<dd>{{ exec.name }}</dd>
+				<dt>Favourite Anime</dt>
+				<dd>{{ exec.fav }}</dd>
+				<dt>About</dt>
+				<dd>{{ exec.about_saved|safe }}</dd>
+			</dl>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+{% endblock %}
+
+{% block extraScripts %}
+<script>
+var menuItem = document.getElementById("menu_profile");
+menuItem.className = "active";
+</script>
+{% endblock %}
